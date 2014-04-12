@@ -117,15 +117,6 @@ class LeapBot(irc.IRCClient):
             return [None, user, nick]
 
     def get_last_seen(self, nick, user):
-        if nick == format_username(user):
-            self.say(self.channel, "%s: %s" % (nick, "Why do you want to do "\
-                                  "that? Try this on some other user."))
-            return
-        if nick == self.nickname:
-            self.say(self.channel, "%s: I'm always here! Try !help."
-                     % (format_username(user)))
-            return
-
         return dbpool.runInteraction(self._get_last_seen, nick, user)
 
     def show_last_seen(self, result):
@@ -136,18 +127,22 @@ class LeapBot(irc.IRCClient):
         nick = result.pop()
         user = result.pop()
         result = result[0]
-        if result:
+        if nick == format_username(user):
+            reply = "%s: Why do you want to do that? Try this on some"\
+                    "other user." % (nick)
+        elif nick == self.nickname:
+            reply = "%s: I'm always here! Try !help." % (format_username(user))
+        elif result:
             #Unpacking Tuple returned by DB query.
             time_string, last_msg = [str(result[i]) for i in range(1, 3)]
             time_string = datetime.strptime(time_string, "%c")
             reply = "%s: %s was last seen on channel %s %s -> <%s>: %s"\
                     % (format_username(user), nick, self.channel,
                        calculate_time_difference(time_string), nick, last_msg)
-            self.say(self.channel, reply)
         else:
             reply = "%s: I have not seen %s yet. Try asking around."\
                     % (format_username(user), nick)
-            self.say(self.channel, reply)
+        self.say(self.channel, reply)
         log.msg(reply, observer="irc")
 
     def _update_last_seen(self, interact, nick, time, last_msg):
