@@ -58,20 +58,16 @@ class LeapBot(irc.IRCClient):
         reply = ""
         if msg.startswith("!"):
             msg = msg[1:].split()
-            if msg[0] == "give" and len(msg) == 3:
+            if msg[0] == "give" and len(msg) == 3 and msg[2] in COMMANDS.keys():
                 nick, command = msg[1], msg[2]
-                reply = "%s: %s" % (nick, COMMANDS[command])
+                reply = "%s: %s" % (nick, COMMANDS[command]())
             elif msg[0] in COMMANDS.keys():
                 command = msg[0]
-                if command == "seen":
-                    if len(msg) == 1:
-                        reply = "%s: %s" % (format_username(user),
-                                            COMMANDS[command])
-                    elif len(msg) == 2:    
-                        nick = msg[1]
-                        answer = self.get_last_seen(nick, user).addCallback(self.show_last_seen)
-                else:
-                    reply = "%s" % (COMMANDS[msg[0]])
+                if len(msg) == 1:
+                    reply = COMMANDS[command]()
+                elif command == "seen" and len(msg) == 2:
+                    nick = msg[1]
+                    answer = self.get_last_seen(nick, user).addCallback(self.show_last_seen)
             self.say(channel, reply)
         elif settings.NICKNAME in msg:
             reply = settings.WELCOME_MSG % (format_username(user))
@@ -84,12 +80,12 @@ class LeapBot(irc.IRCClient):
     def userJoined(self, user, channel):
         """Called when a user joins the channel."""
         # TODO: Maybe send messages stored for the user
-        log.msg("%s has joined #%s." % (format_username(user), channel),
+        log.msg("%s has joined %s." % (format_username(user), channel),
                 observer="irc")
 
     def userLeft(self, user, channel):
         """Called when a user leaves the channel."""
-        log.msg("%s has left #%c." % (format_username(user), channel),
+        log.msg("%s has left %s." % (format_username(user), channel),
                 observer="irc")
 
     def action(self, user, channel, data):
