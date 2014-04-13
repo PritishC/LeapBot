@@ -8,8 +8,8 @@ Status: Under Development.
 Contributing
 ============
 * Fork the repo.
-* git clone git@github.com:indradhanush/LeapBot.git
-* virtualenv venv
-* source venv/bin/activate
-* pip install -r requirements.txt
-* Commit your code. Send me a pull request.
+* ```https://github.com/indradhanush/LeapBot.git```
+* ```virtualenv venv```
+* ```source venv/bin/activate```
+* ```pip install -r requirements.txt```
+* ```Commit your code. Send me a pull request.```
