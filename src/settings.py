@@ -1,8 +1,8 @@
 import os.path
 
 # General settings
-PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
-
+PROJECT_ROOT = os.path.dirname("%s/../" % os.path.abspath(__file__))
+PROJECT_ROOT = os.path.abspath("%s/../" % os.path.dirname(__file__))
 
 # IRC settings
 HOST = "irc.freenode.net"
