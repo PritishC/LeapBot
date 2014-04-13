@@ -189,11 +189,9 @@ class LeapBotFactory(ReconnectingClientFactory):
 def main():
     from twisted.internet import reactor
 
-    #irc_log = open(settings.LOG_ROOT + settings.IRC_LOGFILE, "a")
-    #system_log = open(settings.LOG_ROOT + settings.SYSTEM_LOGFILE, "a")
     irc_log = DailyLogFile(settings.LOG_ROOT + settings.IRC_LOGFILE,
                            settings.LOG_ROOT)
-    system_log = DailyLogFile(settings.LOG_ROOT + settings.IRC_LOGFILE,
+    system_log = DailyLogFile(settings.LOG_ROOT + settings.SYSTEM_LOGFILE,
                               settings.LOG_ROOT)
 
     irc_observer = log.FileLogObserver(irc_log)

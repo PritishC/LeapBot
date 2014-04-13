@@ -1,7 +1,8 @@
 import os.path
 
 # General settings
-PROJECT_ROOT = os.path.abspath("%s/" % os.path.dirname(__file__))
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+
 
 # IRC settings
 HOST = "irc.freenode.net"
@@ -20,6 +21,8 @@ LOG_ROOT = "%s/logs/" % (PROJECT_ROOT)
 IRC_LOGFILE = "irc.log"
 SYSTEM_LOGFILE = "system.log"
 
-#Database Settingsn
+
+#Database Settings
 DATABASE_NAME = "irc.db"
 DATABASE_PATH = "%s/%s" % (PROJECT_ROOT, DATABASE_NAME)
+
