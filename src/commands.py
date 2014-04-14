@@ -21,7 +21,7 @@ def give_pastebinit():
         "Syntax: 'command | pastebinit'"
 
 def give_ask():
-    return "Do not ask to ask. Also read this on how to ask smart questions ->"\
+    return "Do not ask to ask. Also read this on how to ask smart questions -> "\
         "http://www.catb.org/esr/faqs/smart-questions.html"
 
 def give_patient():
@@ -34,6 +34,19 @@ def give_seen():
 def give_source():
     return "You can view the source here: " + settings.REPO_URL
 
+def give_limits():
+    return settings.LEAP_LIMITATIONS
+
+def give_hard():
+    return settings.LEAP_CHALLENGES
+
+def give_contribute():
+    return settings.LEAP_CONTRIBUTING
+
+def give_project():
+    return settings.LEAP_SOURCE_CODE
+
+
 COMMANDS = {
     "help": give_help,
     "paste": give_paste,
@@ -42,5 +55,9 @@ COMMANDS = {
     "patient": give_patient,
     "seen": give_seen,
     "source": give_source,
+    "limits": give_limits,
+    "hard": give_hard,
+    "contribute": give_contribute,
+    "project": give_project,
 }
 
