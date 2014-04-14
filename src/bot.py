@@ -105,6 +105,10 @@ class LeapBot(irc.IRCClient):
 
     # DB Interaction
     def _get_last_seen(self, interact, nick, user):
+        """
+        Method that runs in a separate thread. Called by dbpool.runInteraction
+        in get_last_seen method.
+        """
         interact.execute("SELECT * FROM last_seen WHERE nick = ?", (nick, ))
         result = interact.fetchone()
         if result:
@@ -113,6 +117,9 @@ class LeapBot(irc.IRCClient):
             return [None, user, nick]
 
     def get_last_seen(self, nick, user):
+        """
+        Used to fetch the last_seen parameter of a user.
+        """
         return dbpool.runInteraction(self._get_last_seen, nick, user)
 
     def show_last_seen(self, result):
@@ -142,6 +149,10 @@ class LeapBot(irc.IRCClient):
         log.msg(reply, observer="irc")
 
     def _update_last_seen(self, interact, nick, time, last_msg):
+        """
+        Method that runs in a separate thread. Called by dbpool.runInteraction
+        in update_last_seen method.
+        """
         interact.execute("SELECT * FROM last_seen WHERE nick = ?", (nick, ))
         result = interact.fetchone()
         if result:
@@ -153,9 +164,15 @@ class LeapBot(irc.IRCClient):
         return True
 
     def update_last_seen(self, nick, time, last_msg):
+        """
+        Updates the last_seen parameter of a user.
+        """
         return dbpool.runInteraction(self._update_last_seen, nick, time, last_msg)
     
     def verify_update(self, result):
+        """
+        Callback for update_last_seen method.
+        """
         if result:
             return
         else:
