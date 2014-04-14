@@ -4,6 +4,10 @@ from twisted.words.protocols import irc
 from twisted.python import log
 from twisted.python.logfile import DailyLogFile
 from twisted.enterprise import adbapi
+from twisted.web.client import getPage
+
+#Other Imports
+from bs4 import BeautifulSoup
 
 #System Imports
 import sys
@@ -44,7 +48,7 @@ class LeapBot(irc.IRCClient):
     def joined(self, channel):
         """Called when the bot joins the channel."""
         self.channel = channel
-        log.msg("%s joined channel %s" % (settings.NICKNAME, channel),
+        log.msg("%s joined channel %s" % (self.nickname, channel),
                 observer="system")
 
     def privmsg(self, user, channel, msg):
@@ -52,7 +56,7 @@ class LeapBot(irc.IRCClient):
         time_string = datetime.strftime(datetime.utcnow(), "%c")
         log.msg("%s: %s" % (format_username(user), msg), observer="irc")
         self.update_last_seen(format_username(user), time_string,
-                              msg).addCallback(self.verify_update)
+                              msg).addBoth(self.verify_update)
 
         # If the message starts with '!', it may be a command.
         reply = ""
@@ -69,13 +73,19 @@ class LeapBot(irc.IRCClient):
                     nick = msg[1]
                     answer = self.get_last_seen(nick, user).addCallback(self.show_last_seen)
             self.say(channel, reply)
-        elif settings.NICKNAME in msg:
+        elif "http://" in msg:
+            for word in msg.split():
+                if "http://" in word:
+                    url = word[word.index("http://"):]
+                    d = getPage(url)
+                    d.addCallback(self.callbackGetTitle).addErrback(
+                        self.errbackGetTitle)
+        elif self.nickname in msg:
             reply = settings.WELCOME_MSG % (format_username(user))
             self.say(channel, reply)
-            log.msg("%s: %s" % (settings.NICKNAME, reply), observer="irc")
-        
+             
         if reply:
-            log.msg(reply, observer="irc")
+            log.msg("%s: %s" % (self.nickname, reply), observer="irc")
 
     def userJoined(self, user, channel):
         """Called when a user joins the channel."""
@@ -101,7 +111,8 @@ class LeapBot(irc.IRCClient):
         """Appends '_' if nickname is not available."""
         log.msg("Nickname %s is not available. Appending '_'. " % (nickname),
                 observer="system")
-        return nickname + '_'
+        self.nickname += '_'
+        return self.nickname
 
     # DB Interaction
     def _get_last_seen(self, interact, nick, user):
@@ -178,6 +189,23 @@ class LeapBot(irc.IRCClient):
         else:
             log.msg("Failed to update last_seen.", observer="system")
 
+    def callbackGetTitle(self, result):
+        """
+        Callback method for twisted.web.client.getPage.
+        """
+        soup = BeautifulSoup(result)
+        reply = str(soup.title.string)
+        self.say(self.channel, reply)
+        log.msg("%s: %s" % (self.nickname, reply), observer="irc")
+
+    def errbackGetTitle(self, failure):
+        """
+        Errback method for twisted.web.client.getPage.
+        """
+        # Fail Silently.
+        pass
+
+
 class LeapBotFactory(ReconnectingClientFactory):
     
     def __init__(self, channel):
@@ -219,4 +247,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
