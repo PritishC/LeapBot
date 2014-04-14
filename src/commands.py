@@ -2,6 +2,8 @@
 Commands for Bot and command related helper functions.
 """
 
+import settings
+
 
 def give_help():
     help_text = "Available commands are: "
@@ -29,6 +31,8 @@ def give_patient():
 def give_seen():
     return "Use this to check when a user was last seen. Syntax: !seen <nick>"
 
+def give_source():
+    return "You can view the source here: " + settings.REPO_URL
 
 COMMANDS = {
     "help": give_help,
@@ -37,5 +41,6 @@ COMMANDS = {
     "ask": give_ask,
     "patient": give_patient,
     "seen": give_seen,
+    "source": give_source,
 }
 
