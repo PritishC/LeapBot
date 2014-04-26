@@ -8,10 +8,10 @@ PROJECT_ROOT = os.path.abspath("%s/../" % os.path.dirname(__file__))
 HOST = "irc.freenode.net"
 PORT = 6667
 USE_SSL = False
-NICKNAME = "leapbot"
-REALNAME = "bot: logs #leap channel"
+NICKNAME = "gsoc-in-bot"
+REALNAME = "bot: logs #gsoc-india channel on Freenode."
 
-CHANNEL = "#test_leapbot"
+CHANNEL = "##gsoc-india"
 
 WELCOME_MSG = "Hello %s, I am a logging bot. Also try '!help' to know more about me."
 
