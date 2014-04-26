@@ -73,10 +73,11 @@ class LeapBot(irc.IRCClient):
                     nick = msg[1]
                     answer = self.get_last_seen(nick, user).addCallback(self.show_last_seen)
             self.say(channel, reply)
-        elif "http://" in msg:
+        elif "http" in msg:
+            key = "http"
             for word in msg.split():
-                if "http://" in word:
-                    url = word[word.index("http://"):]
+                if key in word:
+                    url = word[word.index(key):]
                     d = getPage(url)
                     d.addCallback(self.callbackGetTitle).addErrback(
                         self.errbackGetTitle)
