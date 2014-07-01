@@ -198,6 +198,7 @@ class LogBot(irc.IRCClient):
         """
         soup = BeautifulSoup(result)
         reply = str(soup.title.string)
+        reply = "Title: %s" % (reply)
         self.say(self.channel, reply)
         log.msg("%s: %s" % (self.nickname, reply), observer="irc")
 

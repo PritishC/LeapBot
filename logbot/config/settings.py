@@ -5,16 +5,17 @@ import os.path
 PROJECT_ROOT = os.path.abspath("%s/../../" % os.path.dirname(__file__))
 REPO_URL = "https://github.com/indradhanush/LeapBot"
 
+# Bot Settings
+CHANNEL = "#test_leapbot"
+WELCOME_MSG = "Hello %s, I am a logging bot. Also try '!help' to know more about me."
+
+
 # IRC settings
 HOST = "irc.freenode.net"
 PORT = 6667
 USE_SSL = False
 NICKNAME = "logbot"
-REALNAME = "bot: logs #gsoc-india channel on Freenode."
-
-CHANNEL = "#test_leapbot"
-
-WELCOME_MSG = "Hello %s, I am a logging bot. Also try '!help' to know more about me."
+REALNAME = "bot: logs %s channel on %s." % (CHANNEL, HOST)
 
 
 # Log Settings
