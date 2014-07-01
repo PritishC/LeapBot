@@ -34,6 +34,8 @@ def give_seen():
 def give_source():
     return "You can view the source here: " + settings.REPO_URL
 
+def give_logs():
+    return "Logs are at: " + settings.LOG_URL
 
 COMMANDS = {
     "help": give_help,
@@ -43,5 +45,6 @@ COMMANDS = {
     "patient": give_patient,
     "seen": give_seen,
     "source": give_source,
+    "logs": give_logs,
 }
 
