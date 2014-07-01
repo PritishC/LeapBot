@@ -5,7 +5,7 @@ from twisted.python.logfile import DailyLogFile
 
 # Local Imports
 from logbot.config import settings
-from logbot.bot import LeapBotFactory
+from logbot.bot import LogBotFactory
 
 
 def main():
@@ -22,7 +22,7 @@ def main():
     log.addObserver(filteringObserver(system_observer.emit, "system"))
     log.addObserver(filteringObserver(irc_observer.emit, "irc"))
 
-    reactor.connectTCP(settings.HOST, settings.PORT, LeapBotFactory(settings.CHANNEL))
+    reactor.connectTCP(settings.HOST, settings.PORT, LogBotFactory(settings.CHANNEL))
     reactor.run()
 
 

@@ -23,7 +23,7 @@ from logbot.common.utils import format_username, calculate_time_difference
 dbpool = adbapi.ConnectionPool("sqlite3", settings.DATABASE_NAME)
 
 
-class LeapBot(irc.IRCClient):
+class LogBot(irc.IRCClient):
 
     def __init__(self, nickname, realname):
         self.nickname = nickname
@@ -209,13 +209,13 @@ class LeapBot(irc.IRCClient):
         pass
 
 
-class LeapBotFactory(ReconnectingClientFactory):
+class LogBotFactory(ReconnectingClientFactory):
     
     def __init__(self, channel):
         self.channel = channel
 
     def buildProtocol(self, address):
-        protocol = LeapBot(settings.NICKNAME, settings.REALNAME)
+        protocol = LogBot(settings.NICKNAME, settings.REALNAME)
         protocol.factory = self
         return protocol
 
@@ -228,7 +228,4 @@ class LeapBotFactory(ReconnectingClientFactory):
         log.msg("Connection Failed: %s" % (reason), observer="system")
         log.msg("Attempting to reconnect...", observer="system")
         ReconnectingClientFactory.clientConnectionFailed(self, connector, reason)
-
-
-
 

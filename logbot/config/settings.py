@@ -9,7 +9,7 @@ REPO_URL = "https://github.com/indradhanush/LeapBot"
 HOST = "irc.freenode.net"
 PORT = 6667
 USE_SSL = False
-NICKNAME = "gsoc-in-bot"
+NICKNAME = "logbot"
 REALNAME = "bot: logs #gsoc-india channel on Freenode."
 
 CHANNEL = "#test_leapbot"
