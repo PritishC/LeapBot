@@ -1,4 +1,9 @@
-#Twisted Imports
+# System Imports
+import sys
+import time
+from datetime import datetime
+
+# Twisted Imports
 from twisted.internet.protocol import ReconnectingClientFactory
 from twisted.words.protocols import irc
 from twisted.python import log
@@ -6,20 +11,17 @@ from twisted.python.logfile import DailyLogFile
 from twisted.enterprise import adbapi
 from twisted.web.client import getPage
 
-#Other Imports
+# Other Imports
 from bs4 import BeautifulSoup
 
-#System Imports
-import sys
-import time
-from datetime import datetime
-
 # Local Imports
-import settings
-from commands import COMMANDS
-from utils import filteringObserver, format_username, calculate_time_difference
+from logbot.config import settings
+from logbot.commands import COMMANDS
+from logbot.common.utils import format_username, calculate_time_difference
+
 
 dbpool = adbapi.ConnectionPool("sqlite3", settings.DATABASE_NAME)
+
 
 class LeapBot(irc.IRCClient):
 
@@ -228,25 +230,5 @@ class LeapBotFactory(ReconnectingClientFactory):
         ReconnectingClientFactory.clientConnectionFailed(self, connector, reason)
 
 
-def main():
-    from twisted.internet import reactor
-
-    irc_log = DailyLogFile(settings.LOG_ROOT + settings.IRC_LOGFILE,
-                           settings.LOG_ROOT)
-    system_log = DailyLogFile(settings.LOG_ROOT + settings.SYSTEM_LOGFILE,
-                              settings.LOG_ROOT)
-
-    irc_observer = log.FileLogObserver(irc_log)
-    system_observer = log.FileLogObserver(system_log)
-
-    log.addObserver(filteringObserver(system_observer.emit, "system"))
-    log.addObserver(filteringObserver(irc_observer.emit, "irc"))
-
-    reactor.connectTCP(settings.HOST, settings.PORT, LeapBotFactory(settings.CHANNEL))
-    reactor.run()
-
-
-if __name__ == "__main__":
-    main()
 
 

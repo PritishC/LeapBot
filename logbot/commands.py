@@ -2,7 +2,7 @@
 Commands for Bot and command related helper functions.
 """
 
-import settings
+from logbot.config import settings
 
 
 def give_help():
@@ -34,18 +34,6 @@ def give_seen():
 def give_source():
     return "You can view the source here: " + settings.REPO_URL
 
-def give_limits():
-    return settings.LEAP_LIMITATIONS
-
-def give_hard():
-    return settings.LEAP_CHALLENGES
-
-def give_contribute():
-    return settings.LEAP_CONTRIBUTING
-
-def give_project():
-    return settings.LEAP_SOURCE_CODE
-
 
 COMMANDS = {
     "help": give_help,
@@ -55,9 +43,5 @@ COMMANDS = {
     "patient": give_patient,
     "seen": give_seen,
     "source": give_source,
-    "limits": give_limits,
-    "hard": give_hard,
-    "contribute": give_contribute,
-    "project": give_project,
 }
 
