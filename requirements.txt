@@ -1,7 +1,12 @@
 Twisted==13.2.0
 argparse==1.2.1
 beautifulsoup4==4.3.2
+cffi==0.8.2
+cryptography==0.4
 distribute==0.6.24
+irclog2html==2.13.1
+pyOpenSSL==0.14
+pycparser==2.10
 python-dateutil==2.2
 six==1.6.1
 wsgiref==0.1.2

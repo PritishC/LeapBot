@@ -5,6 +5,7 @@ BASE_PATH='/usr/local'
 # Installing requirements.
 apt-get update
 apt-get install -y python2.7 python-dev python-virtualenv build-essential 
+apt-get install libssl-dev
 
 # Cloning the repo.
 cd $BASE_PATH
@@ -22,5 +23,4 @@ crontab -l > cron_back
 echo | cat /usr/local/LeapBot/scripts/cron_jobs >> cron_back
 crontab cron_back
 
-echo "Starting bot..."
-/usr/local/logbot/bin/python /usr/local/LeapBot/runner.py &
+echo "Installation complete. Change logbot/config/settings.py and run python runner.py from the project root."
