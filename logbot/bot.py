@@ -20,7 +20,7 @@ from logbot.commands import COMMANDS
 from logbot.common.utils import format_username, calculate_time_difference
 
 
-dbpool = adbapi.ConnectionPool("sqlite3", settings.DATABASE_NAME)
+dbpool = adbapi.ConnectionPool("sqlite3", settings.DATABASE_NAME, check_same_thread=False)
 
 
 class LogBot(irc.IRCClient):
