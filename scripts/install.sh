@@ -1,6 +1,6 @@
 #! /bin/bash
 
-BASE_PATH='/usr/local/'
+BASE_PATH='/usr/local'
 
 # Installing requirements.
 apt-get update
