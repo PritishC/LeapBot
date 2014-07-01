@@ -22,6 +22,7 @@ REALNAME = "bot: logs %s channel on %s." % (CHANNEL, HOST)
 LOG_ROOT = "%s/logs/" % (PROJECT_ROOT)
 IRC_LOGFILE = "irc.log"
 SYSTEM_LOGFILE = "system.log"
+LOG_URL = "http://gsocinfo.dhanush.kd.io/logs/irc.log"
 
 
 # Database Settings
