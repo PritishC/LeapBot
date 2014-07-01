@@ -1,0 +1,1 @@
+5 * * * * /usr/local/logbot/bin/python /usr/local/LeapBot/scripts/generate_logs.py
