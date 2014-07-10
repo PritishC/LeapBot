@@ -44,19 +44,19 @@ class LogBot(irc.IRCClient):
     def signedOn(self):
         """Called when the bot has successfully signed on to the server."""
         self.join(self.factory.channel)
-        log.msg("Signed onto %s on Port %s" % (settings.HOST, settings.PORT),
+        log.msg("Signed onto {0} on Port {1}".format(settings.HOST, settings.PORT),
                 observer="system")
 
     def joined(self, channel):
         """Called when the bot joins the channel."""
         self.channel = channel
-        log.msg("%s joined channel %s" % (self.nickname, channel),
+        log.msg("{0} joined channel {1}".format(self.nickname, channel),
                 observer="system")
 
     def privmsg(self, user, channel, msg):
         """Called when the bot receives a message."""
         time_string = datetime.strftime(datetime.utcnow(), "%c")
-        log.msg("%s: %s" % (format_username(user), msg), observer="irc")
+        log.msg("{0}: {1}".format(format_username(user), msg), observer="irc")
         self.update_last_seen(format_username(user), time_string,
                               msg).addBoth(self.verify_update)
 
@@ -66,7 +66,7 @@ class LogBot(irc.IRCClient):
             msg = msg[1:].split()
             if msg[0] == "give" and len(msg) == 3 and msg[2] in COMMANDS.keys():
                 nick, command = msg[1], msg[2]
-                reply = "%s: %s" % (nick, COMMANDS[command]())
+                reply = "{0}: {1}".format(nick, COMMANDS[command]())
             elif msg[0] in COMMANDS.keys():
                 command = msg[0]
                 if len(msg) == 1:
@@ -88,31 +88,36 @@ class LogBot(irc.IRCClient):
             self.say(channel, reply)
              
         if reply:
-            log.msg("%s: %s" % (self.nickname, reply), observer="irc")
+            log.msg("{0}: {1}".format(self.nickname, reply), observer="irc")
 
     def userJoined(self, user, channel):
         """Called when a user joins the channel."""
         # TODO: Maybe send messages stored for the user
-        log.msg("%s has joined %s." % (format_username(user), channel),
+        log.msg("{0} has joined {1}.".format(format_username(user), channel),
                 observer="irc")
 
     def userLeft(self, user, channel):
         """Called when a user leaves the channel."""
-        log.msg("%s has left %s." % (format_username(user), channel),
+        log.msg("{0} has left {1}.".format(format_username(user), channel),
+                observer="irc")
+
+    def userQuit(self, user, channel):
+        """Called when a user quits the channel."""
+        log.msg("{0} has quit {1}.".format(format_username(user), channel),
                 observer="irc")
 
     def action(self, user, channel, data):
         """Called when a user performs an ACTION on the channel."""
-        log.msg("* %s %s" % (format_username(user), data), observer="irc")
+        log.msg("* {0} {1}".format(format_username(user), data), observer="irc")
 
     def userRenamed(self, oldname, newname):
         """Called when a user changes their name."""
-        log.msg("%s is now known as %s." % (oldname, newname), observer="irc")
+        log.msg("{0} is now known as {1}.".format(oldname, newname), observer="irc")
 
     # IRC Callbacks
     def alterCollideNick(self, nickname):
         """Appends '_' if nickname is not available."""
-        log.msg("Nickname %s is not available. Appending '_'. " % (nickname),
+        log.msg("Nickname {0} is not available. Appending '_'. ".format(nickname),
                 observer="system")
         self.nickname += '_'
         return self.nickname
@@ -145,20 +150,20 @@ class LogBot(irc.IRCClient):
         user = result.pop()
         result = result[0]
         if nick == format_username(user):
-            reply = "%s: Why do you want to do that? Try this on some"\
-                    "other user." % (nick)
+            reply = "{0}: Why do you want to do that? Try this on some"\
+                    "other user.".format(nick)
         elif nick == self.nickname:
-            reply = "%s: I'm always here! Try !help." % (format_username(user))
+            reply = "{0}: I'm always here! Try !help.".format(format_username(user))
         elif result:
             #Unpacking Tuple returned by DB query.
             time_string, last_msg = [str(result[i]) for i in range(1, 3)]
             time_string = datetime.strptime(time_string, "%c")
-            reply = "%s: %s was last seen on channel %s %s -> <%s>: %s"\
-                    % (format_username(user), nick, self.channel,
-                       calculate_time_difference(time_string), nick, last_msg)
+            reply = "{0}: {1} was last seen on channel {2} {3} -> <{4}>: {5}"\
+                    .format(format_username(user), nick, self.channel,
+                            calculate_time_difference(time_string), nick, last_msg)
         else:
-            reply = "%s: I have not seen %s yet. Try asking around."\
-                    % (format_username(user), nick)
+            reply = "{0}: I have not seen {1} yet. Try asking around."\
+                    .format(format_username(user), nick)
         self.say(self.channel, reply)
         log.msg(reply, observer="irc")
 
@@ -198,9 +203,9 @@ class LogBot(irc.IRCClient):
         """
         soup = BeautifulSoup(result)
         reply = str(soup.title.string)
-        reply = "Title: %s" % (reply)
+        reply = "Title: {0}".format(reply)
         self.say(self.channel, reply)
-        log.msg("%s: %s" % (self.nickname, reply), observer="irc")
+        log.msg("{0}: {1}".format(self.nickname, reply), observer="irc")
 
     def errbackGetTitle(self, failure):
         """
@@ -221,12 +226,12 @@ class LogBotFactory(ReconnectingClientFactory):
         return protocol
 
     def clientConnectionLost(self, connector, reason):
-        log.msg("Connection Lost: %s" % (reason), observer="system")
+        log.msg("Connection Lost: {0}".format(reason), observer="system")
         log.msg("Attempting to reconnect...", observer="system")
         ReconnectingClientFactory.clientConnectionLost(self, connector, reason)
 
     def clientConnectionFailed(self, connector, reason):
-        log.msg("Connection Failed: %s" % (reason), observer="system")
+        log.msg("Connection Failed: {0}".format(reason), observer="system")
         log.msg("Attempting to reconnect...", observer="system")
         ReconnectingClientFactory.clientConnectionFailed(self, connector, reason)
 
